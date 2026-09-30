@@ -35,3 +35,8 @@ vendor-only fan temperature list. No new U-Boot tree is created.
 Compilation and targeted bindings are host-side checks only. Power rails,
 charging, wireless, touch/joypad calibration, audio, fan, suspend, bootloader
 compatibility and GPU execution must be verified on hardware.
+
+GPU core/SRAM share RK806 DCDC_REG1. A standard single-regulator OPP table
+replaces vendor hardware masks and dual-regulator arrays. Frequencies are
+initially limited to 300-800 MHz, using the BSP nominal voltages; runtime
+thermal/voltage/performance characterization remains pending.

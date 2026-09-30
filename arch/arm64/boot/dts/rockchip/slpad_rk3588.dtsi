@@ -1517,3 +1517,18 @@
   fan-map-5 { trip = <&slpad_fan5>; cooling-device = <&fan 5 5>; };
  };
 };
+
+/* Panthor controls one regulator; core and SRAM share RK806 DCDC_REG1. */
+/delete-node/ &gpu_opp_table;
+/ {
+ slpad_gpu_opp_table: slpad-gpu-opp-table {
+  compatible = "operating-points-v2";
+  opp-300000000 { opp-hz = /bits/ 64 <300000000>; opp-microvolt = <675000 675000 850000>; };
+  opp-400000000 { opp-hz = /bits/ 64 <400000000>; opp-microvolt = <675000 675000 850000>; };
+  opp-500000000 { opp-hz = /bits/ 64 <500000000>; opp-microvolt = <675000 675000 850000>; };
+  opp-600000000 { opp-hz = /bits/ 64 <600000000>; opp-microvolt = <675000 675000 850000>; };
+  opp-700000000 { opp-hz = /bits/ 64 <700000000>; opp-microvolt = <700000 700000 850000>; };
+  opp-800000000 { opp-hz = /bits/ 64 <800000000>; opp-microvolt = <750000 750000 850000>; };
+ };
+};
+&gpu { operating-points-v2 = <&slpad_gpu_opp_table>; };
