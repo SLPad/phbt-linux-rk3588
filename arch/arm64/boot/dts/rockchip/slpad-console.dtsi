@@ -203,7 +203,9 @@
 		poll-interval = <100>;
 
 		hp-con-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
-		/* AW8733 control is added by the console audio adaptation. */
+		/* User-confirmed AW8733: complete BSP one-wire mode 3 on GPIO4_A0. */
+		spk-con-gpio = <&gpio4 RK_PA0 GPIO_ACTIVE_HIGH>;
+		rockchip,aw8733-mode = <3>;
 		rockchip,format = "i2s";
 		rockchip,mclk-fs = <256>;
 		rockchip,cpu = <&i2s0_8ch>;

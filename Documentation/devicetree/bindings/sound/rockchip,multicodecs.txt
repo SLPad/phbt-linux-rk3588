@@ -130,3 +130,8 @@ es8388_sound: es8388-sound {
 	pinctrl-0 = <&spk_ctrl>;
 };
 
+
+- rockchip,aw8733-mode: Optional AW8733 one-wire mode (1..4). Requires
+  spk-con-gpio on a non-sleeping GPIO controller. Mode is selected with 2 us
+  high/low pulses; reset and latch waits are outside the atomic pulse train.
+  If absent, the original simple speaker-enable behavior is retained.

@@ -20,6 +20,8 @@
  */
 
 #include <linux/extcon-provider.h>
+#include <linux/delay.h>
+#include <linux/gpio/consumer.h>
 #include <linux/gpio.h>
 #include <linux/iio/consumer.h>
 #include <linux/iio/iio.h>
@@ -62,6 +64,7 @@ struct multicodecs_data {
 	struct snd_soc_jack *jack_headset;
 	struct gpio_desc *hp_ctl_gpio;
 	struct gpio_desc *spk_ctl_gpio;
+	u32 aw8733_mode;
 	struct gpio_desc *hp_det_gpio;
 	struct iio_channel *adc;
 	struct extcon_dev *extcon;
@@ -328,7 +331,26 @@ static int mc_spk_event(struct snd_soc_dapm_widget *w,
 	case SND_SOC_DAPM_POST_PMU:
 		if (mc_data->pre_poweron_delayms)
 			msleep(mc_data->pre_poweron_delayms);
-		gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 1);
+		if (mc_data->aw8733_mode) {
+			unsigned long flags;
+			u32 pulse;
+
+			/* Reset/latch waits may sleep; only the 2us pulse train is atomic. */
+			gpiod_set_value(mc_data->spk_ctl_gpio, 0);
+			usleep_range(500, 1000);
+			local_irq_save(flags);
+			for (pulse = 1; pulse < mc_data->aw8733_mode; pulse++) {
+				gpiod_set_value(mc_data->spk_ctl_gpio, 1);
+				udelay(2);
+				gpiod_set_value(mc_data->spk_ctl_gpio, 0);
+				udelay(2);
+			}
+			gpiod_set_value(mc_data->spk_ctl_gpio, 1);
+			local_irq_restore(flags);
+			usleep_range(500, 1000);
+		} else {
+			gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 1);
+		}
 		break;
 	case SND_SOC_DAPM_PRE_PMD:
 		gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 0);
@@ -938,6 +960,13 @@ static int rk_multicodecs_probe(struct platform_device *pdev)
 							GPIOD_OUT_LOW);
 	if (IS_ERR(mc_data->spk_ctl_gpio))
 		return PTR_ERR(mc_data->spk_ctl_gpio);
+
+	if (!of_property_read_u32(np, "rockchip,aw8733-mode", &mc_data->aw8733_mode)) {
+		if (mc_data->aw8733_mode < 1 || mc_data->aw8733_mode > 4)
+			return dev_err_probe(&pdev->dev, -EINVAL, "AW8733 mode must be 1..4\n");
+		if (!mc_data->spk_ctl_gpio || gpiod_cansleep(mc_data->spk_ctl_gpio))
+			return dev_err_probe(&pdev->dev, -EINVAL, "AW8733 requires a non-sleeping speaker GPIO\n");
+	}
 
 	mc_data->hp_ctl_gpio = devm_gpiod_get_optional(&pdev->dev,
 						       "hp-con",

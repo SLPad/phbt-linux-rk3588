@@ -24,8 +24,8 @@ All configs, board files, drivers and bindings live in this fork.
 Panthor replaces vendor Mali. Debian firmware-misc-nonfree provides
 arm/mali/arch10.8/mali_csffw.bin; the runtime package lock pins its version,
 and the output firmware manifest records the hash/license path. AP6398S/SV
-requires exact board NVRAM and Bluetooth HCD identification. Speaker amp
-identity/control is insufficiently established and its GPIO is omitted.
+requires exact board NVRAM and Bluetooth HCD identification. User confirmed AW8733; GPIO4_A0 one-wire mode 3 is adapted from the complete
+BSP pulse routine, with bounded mode and non-sleeping GPIO checks.
 OLED sequence is preserved; panel/touch firmware and suspend require hardware
 testing. Generic baseline Meson HDMI and MAX96712 drivers have incompatible
 BSP interfaces and are disabled for this board. DCPHY requires the V4L2 media
@@ -40,3 +40,6 @@ GPU core/SRAM share RK806 DCDC_REG1. A standard single-regulator OPP table
 replaces vendor hardware masks and dual-regulator arrays. Frequencies are
 initially limited to 300-800 MHz, using the BSP nominal voltages; runtime
 thermal/voltage/performance characterization remains pending.
+
+The long-lived integration branch is develop-6.12-phbt-staging. Core DTS
+audit details are in slpad-core-dts-audit.rst.
