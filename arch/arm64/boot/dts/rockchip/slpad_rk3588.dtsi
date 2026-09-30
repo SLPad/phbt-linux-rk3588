@@ -34,7 +34,7 @@
 			label = "volume down";
 			linux,code = <KEY_VOLUMEDOWN>;
 			press-threshold-microvolt = <417000>;
-		};		
+		};
 
 		home-key {
 			label = "home";
@@ -226,7 +226,7 @@
 		io-channel-names = "adc-detect";
 		keyup-threshold-microvolt = <1800000>;
 		poll-interval = <100>;
-		
+
 		hp-con-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
 		/* Speaker disabled until the undocumented amplifier is identified. */
 		rockchip,format = "i2s";
@@ -964,7 +964,7 @@
 &spi0 {
     status = "okay";
     pinctrl-0 = <&spi0usr_pins>;
-    
+
     rgb@0 {
         compatible = "opsco,sk9822";
 		status = "okay";
@@ -1056,7 +1056,7 @@
 			power-role = "dual";
 			try-power-role = "sink";
 			op-sink-microwatt = <1000000>;
-			sink-pdos = 
+			sink-pdos =
 				<PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
 				 PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM)
 				 PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM)>;
@@ -1107,7 +1107,7 @@
 		interrupt-parent = <&gpio0>;
 		interrupts = <RK_PD4 IRQ_TYPE_LEVEL_LOW>;
 		wakeup-source;
-	};	
+	};
 
 	cw2015@62 {
 		status = "okay";
@@ -1206,7 +1206,7 @@
         };
 
         bt_gpio: bt-gpio {
-            rockchip,pins = 
+            rockchip,pins =
 					<0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>,
 					<0 RK_PA0 RK_FUNC_GPIO &pcfg_pull_down>,
 					<0 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
@@ -1301,7 +1301,7 @@
 	bus-width = <8>;
 	no-sdio;
 	no-sd;
-	
+
 	non-removable;
 	max-frequency = <200000000>;
 	mmc-hs400-1_8v;
@@ -1337,7 +1337,7 @@
 	cap-sd-highspeed;
 	disable-wp;
 	sd-uhs-sdr104;
-	
+
 	vmmc-supply = <&vcc_3v3_s3>;
 	vqmmc-supply = <&vccio_sd_s0>;
 	pinctrl-names = "default";
