@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/input/rocknix-joypad.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+title: ROCKNIX GPIO and ADC polled gamepad
+maintainers:
+  - liiir1985 <liiir1985@hotmail.com>
+description: Four SARADC stick channels and GPIO buttons used by the SLPad.
+properties:
+  compatible:
+    const: rocknix-joypad
+  poll-interval:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1
+    maximum: 1000
+  joypad-name:
+    $ref: /schemas/types.yaml#/definitions/string
+  joypad-vendor:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  joypad-product:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  joypad-revision:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  io-channels:
+    minItems: 4
+    maxItems: 4
+  io-channel-names:
+    items:
+      - const: key-X
+      - const: key-Y
+      - const: key-RX
+      - const: key-RY
+  button-adc-scale:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 1
+  button-adc-deadzone:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  button-adc-fuzz:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  button-adc-flat:
+    $ref: /schemas/types.yaml#/definitions/uint32
+  invert-absx:
+    type: boolean
+  invert-absy:
+    type: boolean
+  invert-absrx:
+    type: boolean
+  invert-absry:
+    type: boolean
+  autorepeat:
+    type: boolean
+patternProperties:
+  '^abs_(x|y|rx|ry)-[pn]-tuning$':
+    $ref: /schemas/types.yaml#/definitions/uint32
+  '^sw[0-9]+$':
+    type: object
+    properties:
+      gpios:
+        maxItems: 1
+      label: true
+      linux,code:
+        $ref: /schemas/types.yaml#/definitions/uint32
+      linux,input-type:
+        $ref: /schemas/types.yaml#/definitions/uint32
+      linux,input-value:
+        $ref: /schemas/types.yaml#/definitions/uint32
+    required:
+      - gpios
+      - linux,code
+    additionalProperties: false
+required:
+  - compatible
+  - poll-interval
+  - io-channels
+  - io-channel-names
+  - button-adc-scale
+additionalProperties: false

@@ -980,3 +980,9 @@ comment "Simple LED drivers"
 source "drivers/leds/simple/Kconfig"
 
 endif # NEW_LEDS
+
+config LEDS_SK9822
+	tristate "SK9822 SPI RGB LEDs"
+	depends on LEDS_CLASS && SPI && OF
+	help
+	  SPI RGB LED used on the SLPad RK3588 handheld.

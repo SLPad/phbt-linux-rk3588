@@ -654,13 +654,8 @@ static int fts_input_report_b(struct fts_ts_data *data)
 
 		
             input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, events[i].area);
-#if 0
-            input_report_abs(data->input_dev, ABS_MT_POSITION_X, 2176 - events[i].x);
-            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, events[i].y);
-#else
-            input_report_abs(data->input_dev, ABS_MT_POSITION_X, events[i].x);
-            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, events[i].y);
-#endif
+            touchscreen_report_pos(data->input_dev, &data->touchscreen,
+                                   events[i].x, events[i].y, true);
 			//printk("bb...x = %d, y - %d\n...", events[i].x, 2176 - events[i].y, events[i].p);
             touchs |= BIT(events[i].id);
             data->touchs |= BIT(events[i].id);
@@ -730,8 +725,8 @@ static int fts_input_report_a(struct fts_ts_data *data)
             }
             input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, events[i].area);
 
-            input_report_abs(data->input_dev, ABS_MT_POSITION_X, events[i].x);
-            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, 2176 - events[i].y);
+            touchscreen_report_pos(data->input_dev, &data->touchscreen,
+                                   events[i].x, events[i].y, true);
 			//printk("aa...x = %d, y - %d...p = %d\n...", events[i].x, 2176 - events[i].y, events[i].p);
             input_mt_sync(data->input_dev);
 
@@ -999,6 +994,7 @@ static int fts_input_init(struct fts_ts_data *ts_data)
     input_set_abs_params(input_dev, ABS_MT_POSITION_Y,
             0, pdata->y_max, 0, 0);
 #endif /* CFG_CTS_SWAP_XY */
+    touchscreen_parse_properties(input_dev, true, &ts_data->touchscreen);
     input_set_abs_params(input_dev, ABS_MT_TOUCH_MAJOR, 0, 0xFF, 0, 0);
 #if FTS_REPORT_PRESSURE_EN
     input_set_abs_params(input_dev, ABS_MT_PRESSURE, 0, 0xFF, 0, 0);
@@ -1217,8 +1213,14 @@ static int fts_parse_dt(struct device *dev, struct fts_ts_platform_data *pdata)
     }
 
     /* reset, irq gpio info */
-    pdata->reset_gpio = of_get_named_gpio_flags(np, "focaltech,reset-gpio", 0, &pdata->reset_gpio_flags);
-    pdata->irq_gpio = of_get_named_gpio_flags(np, "focaltech,irq-gpio", 0, &pdata->irq_gpio_flags);
+    pdata->reset_gpio = of_get_named_gpio(np, "focaltech,reset-gpio", 0);
+    pdata->irq_gpio = of_get_named_gpio(np, "focaltech,irq-gpio", 0);
+
+    if ((int)pdata->reset_gpio < 0)
+        return (int)pdata->reset_gpio;
+    if ((int)pdata->irq_gpio < 0)
+        return (int)pdata->irq_gpio;
+    pdata->irq_gpio_flags = irq_get_trigger_type(to_i2c_client(dev)->irq);
 
     ret = of_property_read_u32(np, "focaltech,max-touch-number", &temp_val);
     if (0 == ret) {
@@ -1345,8 +1347,10 @@ static int fts_ts_probe(struct i2c_client *client)
             return -ENOMEM;
         }
         ret = fts_parse_dt(&client->dev, pdata);
-        if (ret)
+        if (ret) {
             FTS_ERROR("[DTS]DT parsing failed");
+            return ret;
+        }
     } else {
         pdata = client->dev.platform_data;
     }

@@ -423,3 +423,9 @@ config JOYSTICK_SEESAW
 	  called adafruit-seesaw.
 
 endif
+
+config JOYSTICK_ROCKNIX
+	tristate "SLPad ROCKNIX GPIO/ADC joypad"
+	depends on OF && GPIOLIB && IIO
+	help
+	  GPIO buttons and analog IIO axes used by the SLPad RK3588 board.

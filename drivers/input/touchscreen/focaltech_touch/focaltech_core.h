@@ -36,6 +36,8 @@
 #include <linux/i2c.h>
 #include <linux/input.h>
 #include <linux/input/mt.h>
+#include <linux/input/touchscreen.h>
+#include <linux/irq.h>
 #include <linux/slab.h>
 #include <linux/interrupt.h>
 #include <linux/delay.h>
@@ -136,6 +138,7 @@ struct ts_event {
 struct fts_ts_data {
     struct i2c_client *client;
     struct input_dev *input_dev;
+    struct touchscreen_properties touchscreen;
     struct fts_ts_platform_data *pdata;
     struct ts_ic_info ic_info;
     struct workqueue_struct *ts_workqueue;

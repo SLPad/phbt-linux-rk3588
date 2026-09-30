@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+#include "slpad_rk3588.dtsi"
+/ {
+ model = "SLPad RK3588 v1.2 (V115 schematic)";
+ compatible = "slpad,rk3588-gamepad", "rockchip,rk3588";
+ chosen {
+  stdout-path = "serial2:1500000n8";
+ };
+};

@@ -120,3 +120,5 @@ obj-y					+= blink/
 
 # Simple LED drivers
 obj-y					+= simple/
+
+obj-$(CONFIG_LEDS_SK9822) += leds-sk9822.o

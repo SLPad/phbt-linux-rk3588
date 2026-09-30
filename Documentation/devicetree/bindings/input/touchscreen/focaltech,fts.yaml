@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/input/touchscreen/focaltech,fts.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+title: Focaltech BSP I2C touchscreen
+maintainers:
+  - liiir1985 <liiir1985@hotmail.com>
+description: Legacy Focaltech BSP properties retained for the SLPad panel.
+allOf:
+  - $ref: touchscreen.yaml#
+properties:
+  compatible:
+    const: focaltech,fts
+  reg:
+    maxItems: 1
+  interrupts:
+    maxItems: 1
+  focaltech,irq-gpio:
+    description: GPIO carrying the falling-edge interrupt.
+    maxItems: 1
+  focaltech,reset-gpio:
+    description: Active-high reset GPIO.
+    maxItems: 1
+  focaltech,max-touch-number:
+    description: Maximum simultaneous touch contacts.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 2
+    maximum: 10
+  focaltech,display-coords:
+    description: Minimum X, minimum Y, maximum X, maximum Y.
+    $ref: /schemas/types.yaml#/definitions/uint32-array
+    minItems: 4
+    maxItems: 4
+required:
+  - compatible
+  - reg
+  - interrupts
+  - focaltech,irq-gpio
+  - focaltech,reset-gpio
+  - focaltech,max-touch-number
+  - focaltech,display-coords
+unevaluatedProperties: false

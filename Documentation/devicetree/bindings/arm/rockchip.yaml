@@ -973,6 +973,11 @@ properties:
           - const: rockchip,rk3399-sapphire-excavator
           - const: rockchip,rk3399
 
+      - description: SLPad RK3588 V115 gamepad
+        items:
+          - const: slpad,rk3588-gamepad
+          - const: rockchip,rk3588
+
       - description: Rockchip RK3588 Evaluation board
         items:
           - const: rockchip,rk3588-evb1-v10
