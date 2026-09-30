@@ -1,5 +1,5 @@
-SLPad RK3588 Phase 0
-====================
+SLPad RK3588 Linux Bring-up
+==========================
 
 Baseline: rockchip-linux/kernel develop-6.12,
 470f9dccbdc42e7b8a824d0a5c5640a10e9457d2 (6.12.69).
