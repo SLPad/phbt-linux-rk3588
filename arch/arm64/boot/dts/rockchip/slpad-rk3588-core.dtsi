@@ -17,8 +17,8 @@
 #include "slpad-rk806.dtsi"
 
 
-/* Reviewed against official develop-6.12 at 470f9dcc. */
-/delete-node/ &gpu_opp_table;
+/* Standard Panthor SoC definitions; board supplies remain above. */
+#include "rk3588-panthor.dtsi"
 
 / {
 	reserved-memory {
@@ -604,32 +604,6 @@
 &wdt {
   status = "okay";
 };
-
-&gpu {
- compatible = "rockchip,rk3588-mali", "arm,mali-valhall-csf";
- interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
- interrupt-names = "job", "mmu", "gpu";
- clocks = <&cru CLK_GPU>, <&cru CLK_GPU_COREGROUP>, <&cru CLK_GPU_STACKS>;
- clock-names = "core", "coregroup", "stacks";
- /delete-property/ assigned-clocks;
- /delete-property/ assigned-clock-rates;
- /delete-property/ upthreshold;
- /delete-property/ downdifferential;
-};
-
-/ {
- slpad_gpu_opp_table: slpad-gpu-opp-table {
-  compatible = "operating-points-v2";
-  opp-300000000 { opp-hz = /bits/ 64 <300000000>; opp-microvolt = <675000 675000 850000>; };
-  opp-400000000 { opp-hz = /bits/ 64 <400000000>; opp-microvolt = <675000 675000 850000>; };
-  opp-500000000 { opp-hz = /bits/ 64 <500000000>; opp-microvolt = <675000 675000 850000>; };
-  opp-600000000 { opp-hz = /bits/ 64 <600000000>; opp-microvolt = <675000 675000 850000>; };
-  opp-700000000 { opp-hz = /bits/ 64 <700000000>; opp-microvolt = <700000 700000 850000>; };
-  opp-800000000 { opp-hz = /bits/ 64 <800000000>; opp-microvolt = <750000 750000 850000>; };
- };
-};
-
-&gpu { operating-points-v2 = <&slpad_gpu_opp_table>; };
 
 &gmac0 { status = "disabled"; };
 

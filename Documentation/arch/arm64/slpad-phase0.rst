@@ -38,8 +38,14 @@ compatibility and GPU execution must be verified on hardware.
 
 GPU core/SRAM share RK806 DCDC_REG1. A standard single-regulator OPP table
 replaces vendor hardware masks and dual-regulator arrays. Frequencies are
-initially limited to 300-800 MHz, using the BSP nominal voltages; runtime
+initially limited to 300-1000 MHz, matching the Linux v6.12 upstream RK3588 OPP values; runtime
 thermal/voltage/performance characterization remains pending.
 
 The long-lived integration branch is develop-6.12-phbt-staging. Core DTS
 audit details are in slpad-core-dts-audit.rst.
+
+The Panthor OPP table is copied from Linux v6.12 rk3588-opp.dtsi.
+It does not reproduce vendor Mali PVTM/leakage/bin or low-temperature
+voltage adjustment. Compilation does not establish electrical compatibility.
+DP0 sound requires ROCKCHIP_HDMI and ROCKCHIP_SPDIF; Android audio routing
+and EDID/ELD must be investigated on the original running BSP.

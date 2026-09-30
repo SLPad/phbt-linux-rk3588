@@ -39,7 +39,7 @@ VBUS GPIO and SBU pins rather than replacing them with an EVB port layout.
 Display: current DSI/DCPHY/HDPTX/VOP definitions with V115 OLED sequence.
 Allocate the 128MiB display CMA pool dynamically, rather than retaining a
 fixed physical HDMI-RX reservation on a board with HDMI RX disabled.
-GPU: standard Panthor CSF binding and one-rail 300-800MHz OPP table; shared
+GPU: standard Panthor CSF binding and one-rail 300-1000MHz OPP table; shared
 GPU core/SRAM RK806 supply, no vendor supported-hw masks.
 Network: no wired Ethernet PHY in the V115 schematic. GMAC1 pins overlap
 console buttons, so both GMAC controllers stay disabled. Maintenance uses
@@ -48,3 +48,9 @@ USB network adapters/gadget provisioning and SDIO AP6398S/SV Wi-Fi.
 Target DTB compilation and focused schemas are checked. The official BSP
 also retains vendor RK806 properties/node names outside generic upstream
 schemas; this audit is not a claim that the entire BSP dtbs_check passes.
+
+The Panthor OPP table is copied from Linux v6.12 rk3588-opp.dtsi.
+It does not reproduce vendor Mali PVTM/leakage/bin or low-temperature
+voltage adjustment. Compilation does not establish electrical compatibility.
+DP0 sound requires ROCKCHIP_HDMI and ROCKCHIP_SPDIF; Android audio routing
+and EDID/ELD must be investigated on the original running BSP.
